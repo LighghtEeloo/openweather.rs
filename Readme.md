@@ -1,0 +1,1 @@
+# OpenWeather CLI in Rust
