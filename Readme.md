@@ -10,9 +10,9 @@ openweather init
 
 and enter the `api_key` acquired from `https://openweathermap.org/api`.
 
-There are two types of apis from `openweathermap.org`, and two modes of query:
-1. version 3.0, requires sign-up and subscription, and supports both `mode = "city"` and `mode = "location"`; **`mode = location` is better because it allows detailed information.**
-2. version 2.5, only requires sign-up, but correspondingly only supports `mode = "city"`.
+There are two modes of query from `openweathermap.org`:
+1. `mode = "location"` which is better because it allows detailed information;
+2. `mode = "city"` which only supports current weather query.
 
 The rest are the granularity settings.
 

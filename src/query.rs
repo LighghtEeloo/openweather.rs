@@ -51,7 +51,7 @@ impl Weather {
         let mut url_str = format!("https://api.openweathermap.org/data");
         match geo {
             Geometry::Location { lat, lon } => {
-                url_str += &format!("/3.0/onecall");
+                url_str += &format!("/2.5/onecall");
                 url_str += &format!("?appid={}", config.api_key);
                 url_str += &format!("&lat={}", lat);
                 url_str += &format!("&lon={}", lon);

@@ -16,9 +16,9 @@ pub struct Config {
 
 #[derive(Serialize, Deserialize, Clone, Debug, ValueEnum)]
 pub enum GeometryMode {
-    #[serde(rename = "location", alias = "Location", alias = "v2.5")]
+    #[serde(rename = "location", alias = "Location")]
     Location,
-    #[serde(rename = "city", alias = "City", alias = "v3.0")]
+    #[serde(rename = "city", alias = "City")]
     City,
 }
 
