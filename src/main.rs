@@ -35,6 +35,9 @@ pub struct QueryArgs {
     /// Geometry mode (should be set in config file)
     #[clap(value_parser, long)]
     pub mode: Option<GeometryMode>,
+    /// Include minutely
+    #[clap(value_parser, long)]
+    pub minutely: Option<bool>,
     /// Include hourly
     #[clap(value_parser, long)]
     pub hourly: Option<bool>,
@@ -58,6 +61,9 @@ async fn main() -> anyhow::Result<()> {
             if let Some(mode) = args.mode {
                 log::warn!("Geometry mode should be set in config file");
                 config.geometry_mode = mode;
+            }
+            if let Some(b) = args.minutely {
+                config.minutely = b;
             }
             if let Some(b) = args.hourly {
                 config.hourly = b;
@@ -97,13 +103,19 @@ async fn main() -> anyhow::Result<()> {
 struct Config {
     api_key: String,
     geometry_mode: GeometryMode,
+    #[serde(default)]
+    minutely: bool,
+    #[serde(default)]
     hourly: bool,
+    #[serde(default)]
     daily: bool,
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug, ValueEnum)]
 pub enum GeometryMode {
+    #[serde(rename = "location", alias = "Location", alias = "v2.5")]
     Location,
+    #[serde(rename = "city", alias = "City", alias = "v3.0")]
     City,
 }
 
@@ -112,6 +124,7 @@ impl Default for Config {
         Self {
             api_key: Default::default(),
             geometry_mode: GeometryMode::Location,
+            minutely: false,
             hourly: false,
             daily: false,
         }
@@ -161,7 +174,7 @@ impl Geometry {
         let url = url::Url::parse("http://ip-api.com/json/")?;
         let text = reqwest::get(url).await?.text().await?;
         let json: serde_json::Value = serde_json::from_str(text.as_str())?;
-        log::info!("geo json: {:?}", json);
+        log::info!("[geo json]: {:?}", json);
         fn field_access<T>(
             json: &serde_json::Value,
             field: &'static str,
@@ -213,14 +226,20 @@ impl Weather {
             }
         }
         url_str += &format!("&units={}", "metric");
-        url_str += &format!("&exclude=minutely");
+        let mut exclude = Vec::new();
+        if !config.minutely {
+            exclude.push("minutely");
+        }
         if !config.hourly {
-            url_str += &format!(",hourly");
+            exclude.push("hourly");
         }
         if !config.daily {
-            url_str += &format!(",daily");
+            exclude.push("daily");
         }
-        log::info!("weather url: {}", url_str);
+        if exclude.len() > 0 {
+            url_str += &format!("&exclude={}", exclude.join(","));
+        }
+        log::info!("[weather url]: {}", url_str);
         let url = url::Url::parse(&url_str)?;
         let body = reqwest::get(url).await?.text().await?;
         Ok(Self { body })
