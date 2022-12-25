@@ -1,5 +1,7 @@
 # OpenWeather CLI in Rust
 
+An **unofficial** cli for openweathermap that outputs json purely for api calling purposes.
+
 Upon installation, please run
 
 ```
