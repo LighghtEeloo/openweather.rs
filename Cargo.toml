@@ -1,9 +1,9 @@
 [package]
-name = "openweather"
+name = "openweather-cli"
 version = "0.1.0"
 edition = "2021"
-authors = ["LitiaEeloo <litiaeeloo@gmail.com>"]
-description = "An openweather wrapper"
+authors = ["LighghtEeloo <litiaeeloo@gmail.com>"]
+description = "An openweather cli wrapper"
 readme = "Readme.md"
 homepage = "https://github.com/LighghtEeloo/openweather.rs"
 repository = "https://github.com/LighghtEeloo/openweather.rs"
